@@ -32,7 +32,7 @@ app.use(morgan('dev'));
 
 app.use(express.json());
 
-app.use('/api/productsold', SoldProductRoutes)
+app.use('/api', SoldProductRoutes)
 
 app.use((err, req, res, next) => {
   const status = err.status || 500;

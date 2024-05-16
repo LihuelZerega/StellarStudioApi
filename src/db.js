@@ -23,11 +23,11 @@ sequelize
 
 const SoldProdcutModel = require("./models/SoldProductModel");
 
-const StellarStudioSoldProdcutModel = SoldProdcutModel(sequelize);
+const StellarStudioSoldProductModel = SoldProdcutModel(sequelize);
 
 sequelize.sync();
 
 module.exports = {
   sequelize,
-  StellarStudioSoldProdcutModel,
+  StellarStudioSoldProductModel,
 };
