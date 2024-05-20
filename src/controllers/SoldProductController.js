@@ -39,12 +39,6 @@ const getSoldProductById = async (req, res) => {
 // Actualizar un producto vendido por ID
 const updateSoldProduct = async (req, res) => {
   try {
-    // Validar errores de entrada
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-
     const [updated] = await StellarStudioSoldProductModel.update(req.body, {
       where: { id: req.params.id }
     });
