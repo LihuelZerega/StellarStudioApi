@@ -1,15 +1,11 @@
-async function fetchGeolocation() {
+const fetchGeolocation = async (ip) => {
     const fetch = (await import('node-fetch')).default;
-    try {
-        const response = await fetch('https://api.ipgeolocation.io/ipgeo?apiKey=' + process.env.GEO_API_KEY);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        throw new Error('Error fetching geolocation');
-    }
-}
-
-module.exports = { fetchGeolocation };
+    const apiKey = process.env.GEO_API_KEY;
+    const url = `https://api.ipgeolocation.io/ipgeo?apiKey=${apiKey}&ip=${ip}`;
+    const response = await fetch(url);
+    const data = await response.json();
+    return data;
+  };
+  
+  module.exports = { fetchGeolocation };
+  

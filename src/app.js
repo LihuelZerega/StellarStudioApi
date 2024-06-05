@@ -15,23 +15,23 @@ const app = express();
 app.set('trust proxy', 1);
 
 app.use(helmet());
+
 app.use(cors({
-  origin: 'http://localhost:3000' || 'https://www.thunderclient.com' || 'https://stellarstudio.vercel.app',
+  origin: ['http://localhost:3000', 'https://www.thunderclient.com', 'https://stellarstudio.vercel.app'],
   credentials: true
 }));
 
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: Infinity
+  max: Infinity 
 });
 
 app.use(limiter);
-app.name = 'STELLAR STUDIO API';
+
 app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(cookieParser());
 app.use(morgan('dev'));
-
 app.use(express.json());
 
 app.use('/api', SoldProductRoutes);
@@ -45,10 +45,18 @@ app.use((err, req, res, next) => {
 
 app.get('/geo', async (req, res) => {
   try {
-      const geolocation = await geoHelper.fetchGeolocation();
-      res.json(geolocation);
+    let ip = req.ip;
+
+    if (ip === '::1' || ip === '127.0.0.1') {
+      const ipResponse = await fetch('https://api.ipify.org?format=json');
+      const ipData = await ipResponse.json();
+      ip = ipData.ip;
+    }
+
+    const geolocation = await geoHelper.fetchGeolocation(ip);
+    res.json(geolocation);
   } catch (error) {
-      res.status(404).json({ message: 'Geolocation not found' });
+    res.status(404).json({ message: 'Geolocation not found', error: error.message });
   }
 });
 
